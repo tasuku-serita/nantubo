@@ -1,0 +1,45 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg:        #F7F3EE;
+  --surface:   #FFFFFF;
+  --card:      #FDF9F5;
+  --border:    #E8E0D5;
+  --text-pri:  #2C2420;
+  --text-sec:  #8C7B6E;
+  --text-ter:  #B5A898;
+  --accent:    #C4714A;
+  --accent-l:  #F2E4D8;
+  --accent-d:  #9A4F2E;
+  --green:     #5A7A55;
+  --green-l:   #E4EDE3;
+  --header-bg: #2C2420;
+  --header-fg: #F7F3EE;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  color: var(--text-pri);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+#root {
+  width: 100%;
+  min-height: 100dvh;
+}
+
+button {
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}

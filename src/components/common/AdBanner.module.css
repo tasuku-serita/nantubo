@@ -1,0 +1,15 @@
+.adBanner {
+  height: 50px;
+  background: #F0E9E1;
+  border-top: 0.5px solid #E8E0D5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  bottom: 56px;
+}
+
+.adLabel {
+  font-size: 12px;
+  color: #B5A898;
+}

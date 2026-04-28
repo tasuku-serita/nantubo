@@ -1,0 +1,2253 @@
+
+
+=== src/App.css ===
+.counter {
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+  margin-bottom: 24px;
+
+  &:hover {
+    border-color: var(--accent-border);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.hero {
+  position: relative;
+
+  .base,
+  .framework,
+  .vite {
+    inset-inline: 0;
+    margin: 0 auto;
+  }
+
+  .base {
+    width: 170px;
+    position: relative;
+    z-index: 0;
+  }
+
+  .framework,
+  .vite {
+    position: absolute;
+  }
+
+  .framework {
+    z-index: 1;
+    top: 34px;
+    height: 28px;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
+      scale(1.4);
+  }
+
+  .vite {
+    z-index: 0;
+    top: 107px;
+    height: 26px;
+    width: auto;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
+      scale(0.8);
+  }
+}
+
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  place-content: center;
+  place-items: center;
+  flex-grow: 1;
+
+  @media (max-width: 1024px) {
+    padding: 32px 20px 24px;
+    gap: 18px;
+  }
+}
+
+#next-steps {
+  display: flex;
+  border-top: 1px solid var(--border);
+  text-align: left;
+
+  & > div {
+    flex: 1 1 0;
+    padding: 32px;
+    @media (max-width: 1024px) {
+      padding: 24px 20px;
+    }
+  }
+
+  .icon {
+    margin-bottom: 16px;
+    width: 22px;
+    height: 22px;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+#docs {
+  border-right: 1px solid var(--border);
+
+  @media (max-width: 1024px) {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+#next-steps ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  margin: 32px 0 0;
+
+  .logo {
+    height: 18px;
+  }
+
+  a {
+    color: var(--text-h);
+    font-size: 16px;
+    border-radius: 6px;
+    background: var(--social-bg);
+    display: flex;
+    padding: 6px 12px;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: box-shadow 0.3s;
+
+    &:hover {
+      box-shadow: var(--shadow);
+    }
+    .button-icon {
+      height: 18px;
+      width: 18px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    li {
+      flex: 1 1 calc(50% - 8px);
+    }
+
+    a {
+      width: 100%;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+  }
+}
+
+#spacer {
+  height: 88px;
+  border-top: 1px solid var(--border);
+  @media (max-width: 1024px) {
+    height: 48px;
+  }
+}
+
+.ticks {
+  position: relative;
+  width: 100%;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -4.5px;
+    border: 5px solid transparent;
+  }
+
+  &::before {
+    left: 0;
+    border-left-color: var(--border);
+  }
+  &::after {
+    right: 0;
+    border-right-color: var(--border);
+  }
+}
+
+
+=== src/App.module.css ===
+.app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #F7F3EE;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.header {
+  background: #2C2420;
+  padding: 14px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.headerTitle {
+  color: #F7F3EE;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.headerSub {
+  color: #B5A898;
+  font-size: 11px;
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 106px;
+}
+
+.tabBar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 56px;
+  background: #FFFFFF;
+  border-top: 0.5px solid #E8E0D5;
+  display: flex;
+  z-index: 10;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #B5A898;
+  border: none;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  padding-top: 3px;
+  transition: color 0.15s;
+}
+
+.tabActive {
+  color: #C4714A;
+  font-weight: 600;
+}
+
+.tabActive::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 3px;
+  background: #C4714A;
+  border-radius: 0 0 3px 3px;
+}
+
+
+=== src/App.tsx ===
+import { useState } from 'react';
+import { AppProvider, useApp } from './context/AppContext';
+import { ConvertTab } from './components/tabs/ConvertTab';
+import { CompareTab } from './components/tabs/CompareTab';
+import { HistoryTab } from './components/tabs/HistoryTab';
+import { AdBanner } from './components/common/AdBanner';
+import { ReviewModal } from './components/modals/ReviewModal';
+import { useReviewPrompt } from './hooks/useReviewPrompt';
+import styles from './App.module.css';
+
+type Tab = 'convert' | 'compare' | 'history';
+
+function AppInner() {
+  const [activeTab, setActiveTab] = useState<Tab>('convert');
+  const { isPremium, usageCount, markReviewed } = useApp();
+  const shouldPromptReview = useReviewPrompt(usageCount);
+  const [reviewDismissed, setReviewDismissed] = useState(false);
+
+  const showReview = shouldPromptReview && !reviewDismissed;
+
+  const handleReview = () => {
+    markReviewed();
+    setReviewDismissed(true);
+    window.open('https://apps.apple.com/', '_blank');
+  };
+
+  const handleLater = () => {
+    markReviewed();
+    setReviewDismissed(true);
+  };
+
+  return (
+    <div className={styles.app}>
+      <header className={styles.header}>
+        <span className={styles.headerTitle}>広さと家賃</span>
+        <span className={styles.headerSub}>㎡を入れるだけで部屋の広さ感をチェック</span>
+      </header>
+
+      <main className={styles.main}>
+        {activeTab === 'convert' && <ConvertTab />}
+        {activeTab === 'compare' && <CompareTab />}
+        {activeTab === 'history' && <HistoryTab />}
+      </main>
+
+      <AdBanner visible={!isPremium} />
+
+      <nav className={styles.tabBar}>
+        {([
+          { id: 'convert', label: '変換' },
+          { id: 'compare', label: '比較' },
+          { id: 'history', label: '履歴' },
+        ] as { id: Tab; label: string }[]).map(tab => (
+          <button
+            key={tab.id}
+            className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ''}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </nav>
+
+      {showReview && (
+        <ReviewModal onReview={handleReview} onLater={handleLater} />
+      )}
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AppProvider>
+      <AppInner />
+    </AppProvider>
+  );
+}
+
+
+=== src/assets/react.svg ===
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+
+=== src/assets/vite.svg ===
+<svg xmlns="http://www.w3.org/2000/svg" width="77" height="47" fill="none" aria-labelledby="vite-logo-title" viewBox="0 0 77 47"><title id="vite-logo-title">Vite</title><style>.parenthesis{fill:#000}@media (prefers-color-scheme:dark){.parenthesis{fill:#fff}}</style><path fill="#9135ff" d="M40.151 45.71c-.663.844-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.493c-.92 0-1.457-1.04-.92-1.788l7.479-10.471c1.07-1.498 0-3.578-1.842-3.578H15.443c-.92 0-1.456-1.04-.92-1.788l9.696-13.576c.213-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.472c-1.07 1.497 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.087.89 1.83L40.153 45.712z"/><mask id="a" width="48" height="47" x="14" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha"><path fill="#000" d="M40.047 45.71c-.663.843-2.02.374-2.02-.699V34.708a2.26 2.26 0 0 0-2.262-2.262H24.389c-.92 0-1.457-1.04-.92-1.788l7.479-10.472c1.07-1.497 0-3.578-1.842-3.578H15.34c-.92 0-1.456-1.04-.92-1.788l9.696-13.575c.213-.297.556-.474.92-.474H53.93c.92 0 1.456 1.04.92 1.788L47.37 13.03c-1.07 1.498 0 3.578 1.842 3.578h11.376c.944 0 1.474 1.088.89 1.831L40.049 45.712z"/></mask><g mask="url(#a)"><g filter="url(#b)"><ellipse cx="5.508" cy="14.704" fill="#eee6ff" rx="5.508" ry="14.704" transform="rotate(269.814 20.96 11.29)scale(-1 1)"/></g><g filter="url(#c)"><ellipse cx="10.399" cy="29.851" fill="#eee6ff" rx="10.399" ry="29.851" transform="rotate(89.814 -16.902 -8.275)scale(1 -1)"/></g><g filter="url(#d)"><ellipse cx="5.508" cy="30.487" fill="#8900ff" rx="5.508" ry="30.487" transform="rotate(89.814 -19.197 -7.127)scale(1 -1)"/></g><g filter="url(#e)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.928 4.177)scale(1 -1)"/></g><g filter="url(#f)"><ellipse cx="5.508" cy="30.599" fill="#8900ff" rx="5.508" ry="30.599" transform="rotate(89.814 -25.738 5.52)scale(1 -1)"/></g><g filter="url(#g)"><ellipse cx="14.072" cy="22.078" fill="#eee6ff" rx="14.072" ry="22.078" transform="rotate(93.35 31.245 55.578)scale(-1 1)"/></g><g filter="url(#h)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#i)"><ellipse cx="3.47" cy="21.501" fill="#8900ff" rx="3.47" ry="21.501" transform="rotate(89.009 35.419 55.202)scale(-1 1)"/></g><g filter="url(#j)"><ellipse cx="14.592" cy="9.743" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(39.51 14.592 9.743)"/></g><g filter="url(#k)"><ellipse cx="61.728" cy="-5.321" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 61.728 -5.32)"/></g><g filter="url(#l)"><ellipse cx="55.618" cy="7.104" fill="#00c2ff" rx="5.971" ry="9.665" transform="rotate(37.892 55.618 7.104)"/></g><g filter="url(#m)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#n)"><ellipse cx="12.326" cy="39.103" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 12.326 39.103)"/></g><g filter="url(#o)"><ellipse cx="49.857" cy="30.678" fill="#8900ff" rx="4.407" ry="29.108" transform="rotate(37.892 49.857 30.678)"/></g><g filter="url(#p)"><ellipse cx="52.623" cy="33.171" fill="#00c2ff" rx="5.971" ry="15.297" transform="rotate(37.892 52.623 33.17)"/></g></g><path d="M6.919 0c-9.198 13.166-9.252 33.575 0 46.789h6.215c-9.25-13.214-9.196-33.623 0-46.789zm62.424 0h-6.215c9.198 13.166 9.252 33.575 0 46.789h6.215c9.25-13.214 9.196-33.623 0-46.789" class="parenthesis"/><defs><filter id="b" width="60.045" height="41.654" x="-5.564" y="16.92" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="c" width="90.34" height="51.437" x="-40.407" y="-6.762" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="d" width="79.355" height="29.4" x="-35.435" y="2.801" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="e" width="79.579" height="29.4" x="-30.84" y="20.8" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="f" width="79.579" height="29.4" x="-29.307" y="21.949" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="g" width="74.749" height="58.852" x="29.961" y="-17.13" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="7.659"/></filter><filter id="h" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="i" width="61.377" height="25.362" x="37.754" y="3.055" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="j" width="56.045" height="63.649" x="-13.43" y="-22.082" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="k" width="54.814" height="64.646" x="34.321" y="-37.644" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="l" width="33.541" height="35.313" x="38.847" y="-10.552" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="m" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="n" width="54.814" height="64.646" x="-15.081" y="6.78" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="o" width="54.814" height="64.646" x="22.45" y="-1.645" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter><filter id="p" width="39.409" height="43.623" x="32.919" y="11.36" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur result="effect1_foregroundBlur_2002_17286" stdDeviation="4.596"/></filter></defs></svg>
+
+
+=== src/components/common/AdBanner.module.css ===
+.adBanner {
+  height: 50px;
+  background: #F0E9E1;
+  border-top: 0.5px solid #E8E0D5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  bottom: 56px;
+}
+
+.adLabel {
+  font-size: 12px;
+  color: #B5A898;
+}
+
+
+=== src/components/common/AdBanner.tsx ===
+import styles from './AdBanner.module.css';
+
+export function AdBanner({ visible }: { visible: boolean }) {
+  if (!visible) return null;
+  return (
+    <div className={styles.adBanner}>
+      {/* 将来ここにAdMob / Google AdSenseのコードを挿入 */}
+      <span className={styles.adLabel}>広告</span>
+    </div>
+  );
+}
+
+
+=== src/components/modals/Modal.module.css ===
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 36, 32, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 200ms ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  width: 320px;
+  max-width: calc(100vw - 48px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #2C2420;
+  margin: 0;
+}
+
+.body {
+  font-size: 14px;
+  color: #8C7B6E;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option {
+  padding: 12px 16px;
+  border: 1px solid #E8E0D5;
+  border-radius: 10px;
+  background: #FFFFFF;
+  color: #2C2420;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.option:hover {
+  background: #F7F3EE;
+}
+
+.optionActive {
+  border-color: #C4714A;
+  color: #C4714A;
+  font-weight: 600;
+}
+
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  color: #2C2420;
+}
+
+.btnRow {
+  display: flex;
+  gap: 8px;
+}
+
+.primaryBtn {
+  flex: 1;
+  height: 48px;
+  background: #C4714A;
+  color: #FDF9F5;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.primaryBtn:hover { background: #9A4F2E; }
+.primaryBtn:active { transform: scale(0.98); }
+
+.secondaryBtn {
+  flex: 1;
+  height: 48px;
+  background: #F7F3EE;
+  color: #8C7B6E;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #E8E0D5;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.secondaryBtn:hover { background: #F0E9E1; }
+
+.cancelBtn {
+  height: 48px;
+  background: transparent;
+  color: #8C7B6E;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+
+=== src/components/modals/PremiumModal.tsx ===
+import styles from './Modal.module.css';
+
+type Props = {
+  onUpgrade: () => void;
+  onClose: () => void;
+};
+
+export function PremiumModal({ onUpgrade, onClose }: Props) {
+  return (
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles.card} onClick={e => e.stopPropagation()}>
+        <h2 className={styles.title}>プレミアム版（買い切り480円）</h2>
+        <ul className={styles.featureList}>
+          <li>✓ 広告なし</li>
+          <li>✓ 比較：3件以上</li>
+          <li>✓ 履歴：無制限</li>
+        </ul>
+        <button className={styles.primaryBtn} onClick={onUpgrade}>
+          アップグレードする
+        </button>
+        <button className={styles.cancelBtn} onClick={onClose}>キャンセル</button>
+      </div>
+    </div>
+  );
+}
+
+
+=== src/components/modals/ReviewModal.tsx ===
+import styles from './Modal.module.css';
+
+type Props = {
+  onReview: () => void;
+  onLater: () => void;
+};
+
+export function ReviewModal({ onReview, onLater }: Props) {
+  return (
+    <div className={styles.overlay}>
+      <div className={styles.card}>
+        <h2 className={styles.title}>使い心地はいかがですか？</h2>
+        <p className={styles.body}>
+          役に立っていたら、ぜひレビューをお願いします。<br />
+          開発の励みになります。
+        </p>
+        <div className={styles.btnRow}>
+          <button className={styles.primaryBtn} onClick={onReview}>レビューする</button>
+          <button className={styles.secondaryBtn} onClick={onLater}>あとで</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+=== src/components/modals/TatamiSettingModal.tsx ===
+import type { TatamiStandard } from '../../types';
+import styles from './Modal.module.css';
+
+const OPTIONS: { value: TatamiStandard; label: string }[] = [
+  { value: '1.62', label: '1.62㎡（江戸間・関東）' },
+  { value: '1.65', label: '1.65㎡（中京間）' },
+  { value: '1.824', label: '1.824㎡（京間・関西）' },
+];
+
+type Props = {
+  current: TatamiStandard;
+  onSelect: (v: TatamiStandard) => void;
+  onClose: () => void;
+};
+
+export function TatamiSettingModal({ current, onSelect, onClose }: Props) {
+  return (
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles.card} onClick={e => e.stopPropagation()}>
+        <h2 className={styles.title}>畳の基準を選択</h2>
+        <div className={styles.options}>
+          {OPTIONS.map(opt => (
+            <button
+              key={opt.value}
+              className={`${styles.option} ${current === opt.value ? styles.optionActive : ''}`}
+              onClick={() => { onSelect(opt.value); onClose(); }}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        <button className={styles.cancelBtn} onClick={onClose}>キャンセル</button>
+      </div>
+    </div>
+  );
+}
+
+
+=== src/components/tabs/CompareTab.module.css ===
+.container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 24px;
+}
+
+.introCard {
+  background: #FFFFFF;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.introTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2C2420;
+  margin: 0;
+}
+
+.introBody {
+  font-size: 12px;
+  color: #8C7B6E;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.hintPill {
+  background: #F2E4D8;
+  color: #C4714A;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
+  align-self: flex-start;
+}
+
+.propertyCard {
+  background: #FFFFFF;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2C2420;
+}
+
+.fieldRow {
+  display: flex;
+  gap: 8px;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 11px;
+  color: #8C7B6E;
+  font-weight: 500;
+}
+
+.input {
+  height: 44px;
+  padding: 0 12px;
+  font-size: 16px;
+  color: #2C2420;
+  background: #FFFFFF;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 10px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.input:focus {
+  border-color: #C4714A;
+}
+
+.resultRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 0.5px solid #E8E0D5;
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #2C2420;
+}
+
+.badge {
+  background: #E4EDE3;
+  color: #5A7A55;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.lockedCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #FDF9F5;
+  border: 0.5px dashed #E8E0D5;
+  border-radius: 12px;
+  padding: 16px 14px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.lockIcon {
+  font-size: 18px;
+}
+
+.lockMsg {
+  font-size: 13px;
+  color: #8C7B6E;
+}
+
+.addBtn {
+  height: 44px;
+  background: #F2E4D8;
+  color: #C4714A;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.summaryCard {
+  background: #FDF9F5;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summaryTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2C2420;
+  margin: 0 0 4px;
+}
+
+.summaryRow {
+  font-size: 13px;
+  color: #5A7A55;
+  margin: 0;
+}
+
+.summaryNote {
+  font-size: 12px;
+  color: #B5A898;
+  margin: 0;
+}
+
+.saveBtn {
+  height: 48px;
+  background: #C4714A;
+  color: #FDF9F5;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  margin-top: 4px;
+}
+
+.saveBtn:hover { background: #9A4F2E; }
+.saveBtn:active { transform: scale(0.98); }
+.saveBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.copyBtn {
+  height: 44px;
+  background: #F2E4D8;
+  color: #C4714A;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.copyBtn:hover { background: #E8D5C4; }
+
+
+=== src/components/tabs/CompareTab.tsx ===
+import { useState } from 'react';
+import { useApp } from '../../context/AppContext';
+import { sqmToTsubo, sqmToTatami } from '../../lib/constants';
+import { formatYen, formatUnit, safeDiv } from '../../lib/format';
+import { PremiumModal } from '../modals/PremiumModal';
+import type { PropertyRecord } from '../../types';
+import styles from './CompareTab.module.css';
+import { usePremium } from '../../hooks/usePremium';
+
+const MAX_VALUE = 99_999_999;
+
+type PropertyInput = {
+  name: string;
+  rent: string;
+  sqm: string;
+  memo: string;
+};
+
+const emptyInput = (): PropertyInput => ({ name: '', rent: '', sqm: '', memo: '' });
+
+function sanitize(v: string): number {
+  const n = parseFloat(v);
+  if (isNaN(n) || n < 0) return 0;
+  return Math.min(n, MAX_VALUE);
+}
+
+function isValid(p: PropertyInput): boolean {
+  return sanitize(p.sqm) > 0;
+}
+
+type Computed = {
+  sqm: number;
+  rent: number;
+  perSqm: number;
+  perTsubo: number;
+};
+
+function compute(p: PropertyInput): Computed {
+  const sqm = sanitize(p.sqm);
+  const rent = sanitize(p.rent);
+  return {
+    sqm,
+    rent,
+    perSqm: safeDiv(rent, sqm),
+    perTsubo: safeDiv(rent, sqmToTsubo(sqm)),
+  };
+}
+
+function winner<T>(items: T[], score: (t: T) => number, higher: boolean): number[] {
+  const scores = items.map(score);
+  const best = higher ? Math.max(...scores) : Math.min(...scores.filter(s => s > 0));
+  return scores.map((s, i) => (s === best && s > 0 ? i : -1)).filter(i => i >= 0);
+}
+
+export function CompareTab() {
+  const { isPremium, tatamiStandard, addHistory, incrementCompareCount } = useApp();
+  const { purchase } = usePremium();
+
+  const [properties, setProperties] = useState<PropertyInput[]>([emptyInput(), emptyInput()]);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [saveMsg, setSaveMsg] = useState('');
+  const [copyLabel, setCopyLabel] = useState('比較結果をコピー');
+
+  const update = (i: number, field: keyof PropertyInput, v: string) => {
+    if ((field === 'rent' || field === 'sqm') && v.length > 10) return;
+    setProperties(prev => prev.map((p, idx) => idx === i ? { ...p, [field]: v } : p));
+  };
+
+  const validProps = properties.filter(isValid);
+  const computed = properties.map(p => compute(p));
+
+  const validIndices = properties.map((p, i) => isValid(p) ? i : -1).filter(i => i >= 0);
+
+  const widestIdxs = winner(computed.filter((_, i) => isValid(properties[i])), c => c.sqm, true);
+  const cheapestSqmIdxs = winner(computed.filter((_, i) => isValid(properties[i]) && computed[i].perSqm > 0), c => c.perSqm, false);
+  const cheapestTsuboIdxs = winner(computed.filter((_, i) => isValid(properties[i]) && computed[i].perTsubo > 0), c => c.perTsubo, false);
+  const cheapestRentIdxs = winner(computed.filter((_, i) => isValid(properties[i]) && computed[i].rent > 0), c => c.rent, false);
+
+  const hasAnyRent = validIndices.some(i => computed[i].rent > 0);
+
+  function isWinner(globalIdx: number, winnerLocalIdxs: number[]): boolean {
+    const localIdx = validIndices.indexOf(globalIdx);
+    return localIdx >= 0 && winnerLocalIdxs.includes(localIdx);
+  }
+
+  function getLabel(localIdxs: number[]): string {
+    return localIdxs.map(i => properties[i].name.trim() || `物件${String.fromCharCode(65 + i)}`).join(' / ');
+  }
+
+  const handleCopyCompare = () => {
+    const lines = ['【広さと家賃】', ''];
+    for (let i = 0; i < properties.length; i++) {
+      if (!isValid(properties[i])) continue;
+      const c = computed[i];
+      const name = properties[i].name.trim() || `物件${String.fromCharCode(65 + i)}`;
+      const tatami = sqmToTatami(c.sqm, tatamiStandard);
+      const tsubo = sqmToTsubo(c.sqm);
+      const perTatami = safeDiv(c.rent, tatami);
+      lines.push(`物件${String.fromCharCode(65 + i)}：${name}`);
+      lines.push(`${c.sqm}㎡ / ${formatUnit(tatami, '畳')} / ${formatUnit(tsubo, '坪')}`);
+      if (c.rent > 0) {
+        lines.push(`家賃：${formatYen(c.rent)}`);
+        lines.push(`㎡単価：${formatYen(c.perSqm)}/㎡`);
+        lines.push(`坪単価：${formatYen(c.perTsubo)}/坪`);
+        if (perTatami > 0) lines.push(`畳単価：${formatYen(perTatami)}/畳`);
+      }
+      lines.push('');
+    }
+    lines.push('比較結果の見方');
+    if (widestIdxs.length > 0) lines.push(`広さ重視なら：${getLabel(widestIdxs)}`);
+    if (cheapestRentIdxs.length > 0 && hasAnyRent) lines.push(`家賃の安さ重視なら：${getLabel(cheapestRentIdxs)}`);
+    if (cheapestSqmIdxs.length > 0 && hasAnyRent) lines.push(`広さと家賃のバランス重視なら：${getLabel(cheapestSqmIdxs)}`);
+
+    navigator.clipboard.writeText(lines.join('\n')).catch(() => {});
+    setCopyLabel('コピーしました ✓');
+    setTimeout(() => setCopyLabel('比較結果をコピー'), 1500);
+  };
+
+  const handleSaveAll = () => {
+    if (validProps.length === 0) return;
+    const now = new Date();
+    let saved = 0;
+    for (let i = 0; i < properties.length; i++) {
+      if (!isValid(properties[i])) continue;
+      const c = computed[i];
+      const record: PropertyRecord = {
+        id: crypto.randomUUID(),
+        name: properties[i].name.trim() || `物件${String.fromCharCode(65 + i)} ${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`,
+        rent: c.rent,
+        sqm: c.sqm,
+        memo: properties[i].memo,
+        perSqm: c.perSqm,
+        perTsubo: c.perTsubo,
+        perTatami: safeDiv(c.rent, sqmToTatami(c.sqm, tatamiStandard)),
+        tatamiStandard,
+        savedAt: now.toISOString(),
+      };
+      const ok = addHistory(record);
+      if (!ok) { setShowPremiumModal(true); break; }
+      saved++;
+    }
+    if (saved > 0) {
+      incrementCompareCount();
+      setSaveMsg(`${saved}件保存しました`);
+      setTimeout(() => setSaveMsg(''), 2000);
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+
+      {/* 説明カード */}
+      <div className={styles.introCard}>
+        <p className={styles.introTitle}>家賃だけで迷わない</p>
+        <p className={styles.introBody}>同じ家賃でも、広さに対するお得感は物件ごとに違います。㎡単価で比べると、広さと家賃のバランスが見えやすくなります。</p>
+      </div>
+
+      <div className={styles.hintPill}>物件を並べて比較</div>
+
+      {properties.map((p, i) => (
+        <div key={i} className={styles.propertyCard}>
+          <div className={styles.cardHeader}>
+            <span className={styles.cardTitle}>物件 {String.fromCharCode(65 + i)}</span>
+          </div>
+          <div className={styles.fieldRow}>
+            <div className={styles.field}>
+              <label className={styles.label}>物件名（任意）</label>
+              <input className={styles.input} type="text" placeholder="例：渋谷のマンション" value={p.name} onChange={e => update(i, 'name', e.target.value)} maxLength={40} />
+            </div>
+          </div>
+          <div className={styles.fieldRow}>
+            <div className={styles.field}>
+              <label className={styles.label}>広さ（㎡）</label>
+              <input className={styles.input} inputMode="decimal" placeholder="例：25.5" value={p.sqm} onChange={e => update(i, 'sqm', e.target.value)} />
+            </div>
+            <div className={styles.field}>
+              <label className={styles.label}>月額家賃（円）</label>
+              <input className={styles.input} inputMode="decimal" placeholder="例：70000" value={p.rent} onChange={e => update(i, 'rent', e.target.value)} />
+            </div>
+          </div>
+          <div className={styles.fieldRow}>
+            <div className={styles.field}>
+              <label className={styles.label}>メモ（任意）</label>
+              <input className={styles.input} type="text" placeholder="例：駅から5分" value={p.memo} onChange={e => update(i, 'memo', e.target.value)} maxLength={100} />
+            </div>
+          </div>
+
+          {isValid(p) && (
+            <div className={styles.resultRow}>
+              <span className={styles.resultItem}>
+                {formatUnit(computed[i].sqm, '㎡')}
+                {isWinner(i, widestIdxs) && <span className={styles.badge}>最広</span>}
+              </span>
+              {computed[i].perSqm > 0 && (
+                <span className={styles.resultItem}>
+                  {formatYen(computed[i].perSqm)}/㎡
+                  {isWinner(i, cheapestSqmIdxs) && <span className={styles.badge}>㎡安</span>}
+                </span>
+              )}
+              {computed[i].perTsubo > 0 && (
+                <span className={styles.resultItem}>
+                  {formatYen(computed[i].perTsubo)}/坪
+                  {isWinner(i, cheapestTsuboIdxs) && <span className={styles.badge}>坪安</span>}
+                </span>
+              )}
+              {computed[i].rent > 0 && (
+                <span className={styles.resultItem}>
+                  家賃{formatYen(computed[i].rent)}
+                  {isWinner(i, cheapestRentIdxs) && <span className={styles.badge}>家賃安</span>}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
+
+      {!isPremium && properties.length < 3 && (
+        <button className={styles.lockedCard} onClick={() => setShowPremiumModal(true)}>
+          <span className={styles.lockIcon}>🔒</span>
+          <span className={styles.lockMsg}>3件以上の比較はプレミアム版（480円）</span>
+        </button>
+      )}
+
+      {isPremium && properties.length < 3 && (
+        <button className={styles.addBtn} onClick={() => setProperties(prev => [...prev, emptyInput()])}>
+          + 物件を追加
+        </button>
+      )}
+
+      {validProps.length >= 2 && (
+        <>
+          <div className={styles.summaryCard}>
+            <p className={styles.summaryTitle}>比較結果の見方</p>
+            {widestIdxs.length > 0 && (
+              <p className={styles.summaryRow}>🏠 広さ重視なら：<strong>{getLabel(widestIdxs)}</strong></p>
+            )}
+            {cheapestRentIdxs.length > 0 && hasAnyRent && (
+              <p className={styles.summaryRow}>💴 家賃の安さ重視なら：<strong>{getLabel(cheapestRentIdxs)}</strong></p>
+            )}
+            {cheapestSqmIdxs.length > 0 && hasAnyRent && (
+              <p className={styles.summaryRow}>💰 広さと家賃のバランス重視なら：<strong>{getLabel(cheapestSqmIdxs)}</strong></p>
+            )}
+            {!hasAnyRent && (
+              <p className={styles.summaryNote}>家賃を入力すると、家賃・バランスの比較も表示されます。</p>
+            )}
+          </div>
+          <button className={styles.copyBtn} onClick={handleCopyCompare}>
+            {copyLabel}
+          </button>
+        </>
+      )}
+
+      <button
+        className={styles.saveBtn}
+        onClick={handleSaveAll}
+        disabled={validProps.length === 0}
+      >
+        {saveMsg || '比較結果をまとめて保存'}
+      </button>
+
+      {showPremiumModal && (
+        <PremiumModal
+          onUpgrade={async () => { await purchase(); setShowPremiumModal(false); }}
+          onClose={() => setShowPremiumModal(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+
+=== src/components/tabs/ConvertTab.module.css ===
+.container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 32px;
+}
+
+/* ─── 説明カード ─── */
+.introCard {
+  background: #FFFFFF;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0 1px 4px rgba(44, 36, 32, 0.04);
+}
+
+.introTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #2C2420;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.introText {
+  font-size: 13px;
+  color: #8C7B6E;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ─── ㎡入力カード（主役） ─── */
+.primaryInputCard {
+  background: #FFFFFF;
+  border: 1.5px solid #D79A78;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(196, 113, 74, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.primaryInputBadge {
+  align-self: flex-start;
+  background: #F2E4D8;
+  color: #C4714A;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+
+.primaryInputLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2C2420;
+  margin: 0;
+}
+
+.primaryInput {
+  height: 56px;
+  padding: 0 14px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #2C2420;
+  background: #FDFAF7;
+  border: 1px solid #E8E0D5;
+  border-radius: 12px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.primaryInput:focus {
+  border-color: #C4714A;
+  box-shadow: 0 0 0 3px rgba(196, 113, 74, 0.12);
+}
+
+.primaryInputHint {
+  font-size: 12px;
+  color: #8C7B6E;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ─── 変換結果カード ─── */
+.resultCard {
+  background: #FDF9F5;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 1px 4px rgba(44, 36, 32, 0.04);
+}
+
+.resultRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resultLabel {
+  font-size: 13px;
+  color: #8C7B6E;
+}
+
+.resultValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: #C4714A;
+}
+
+.tatamiHint {
+  background: none;
+  border: none;
+  color: #B5A898;
+  font-size: 12px;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: underline;
+}
+
+/* ─── 広さの目安カード ─── */
+.guideCard {
+  background: #FFFFFF;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  box-shadow: 0 1px 4px rgba(44, 36, 32, 0.04);
+}
+
+.guideTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2C2420;
+  margin: 0;
+}
+
+.guideText {
+  font-size: 13px;
+  color: #5F5046;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.guideNote {
+  font-size: 11px;
+  color: #B5A898;
+  line-height: 1.5;
+  margin: 2px 0 0;
+}
+
+/* ─── 通常入力フィールド ─── */
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.label {
+  font-size: 12px;
+  color: #8C7B6E;
+  font-weight: 500;
+}
+
+.input {
+  height: 48px;
+  padding: 0 14px;
+  font-size: 17px;
+  color: #2C2420;
+  background: #FFFFFF;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: #C4714A;
+}
+
+/* ─── 補助入力セクション見出し ─── */
+.secondarySectionTitle {
+  font-size: 12px;
+  color: #8C7B6E;
+  font-weight: 700;
+  margin: 4px 0 -4px;
+}
+
+/* ─── 家賃セクション区切り ─── */
+.divider {
+  height: 0.5px;
+  background: #E8E0D5;
+  margin: 4px 0;
+}
+
+.sectionLabel {
+  font-size: 12px;
+  color: #8C7B6E;
+  margin: 0;
+}
+
+/* ─── 家賃単価内説明 ─── */
+.unitGuide {
+  border-top: 0.5px solid #E8E0D5;
+  padding-top: 10px;
+  margin-top: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.unitGuideTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: #2C2420;
+  margin: 0;
+}
+
+.unitGuideText {
+  font-size: 12px;
+  color: #8C7B6E;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── ボタン ─── */
+.saveBtn {
+  height: 50px;
+  background: #C4714A;
+  color: #FDF9F5;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  margin-top: 4px;
+  box-shadow: 0 2px 8px rgba(196, 113, 74, 0.2);
+}
+
+.saveBtn:hover { background: #9A4F2E; }
+.saveBtn:active { transform: scale(0.98); }
+.saveBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.copyBtn {
+  height: 46px;
+  background: #F2E4D8;
+  color: #C4714A;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.copyBtn:hover { background: #E8D5C4; }
+
+
+=== src/components/tabs/ConvertTab.tsx ===
+import { useState, useCallback } from 'react';
+import { useApp } from '../../context/AppContext';
+import { FREE_HISTORY_LIMIT } from '../../context/AppContext';
+import {
+  sqmToTsubo, sqmToTatami,
+  tsuboToSqm, tatamiToSqm,
+  rentPerTatami,
+} from '../../lib/constants';
+import { formatYen, formatUnit, safeDiv } from '../../lib/format';
+import { TatamiSettingModal } from '../modals/TatamiSettingModal';
+import { PremiumModal } from '../modals/PremiumModal';
+import type { PropertyRecord } from '../../types';
+import styles from './ConvertTab.module.css';
+import { usePremium } from '../../hooks/usePremium';
+
+const MAX_VALUE = 99_999_999;
+
+function getAreaGuide(sqm: number): string {
+  if (sqm < 20) return 'かなりコンパクトな広さです。一人暮らしでも荷物が多い人は手狭に感じやすく、二人暮らしや子育て世帯にはかなり窮屈になりやすい目安です。';
+  if (sqm < 25) return '一人暮らしでよく見る広さです。荷物が少なめなら生活しやすい一方、在宅ワークや収納量が多い人は狭く感じることがあります。';
+  if (sqm < 30) return '一人暮らしなら少しゆとりを感じやすい広さです。二人暮らしでは条件次第で検討できますが、子育て世帯ではかなりコンパクトです。';
+  if (sqm < 40) return '一人暮らしなら広めの目安です。二人暮らしでは間取りや収納次第で検討しやすくなります。子ども1人の世帯では工夫が必要です。';
+  if (sqm < 50) return '二人暮らしでも検討しやすい広さです。子ども1人の世帯では間取りや収納が合えば生活できる可能性があります。子ども2人ではやや手狭に感じやすい目安です。';
+  if (sqm < 60) return '二人暮らしなら比較的ゆとりを感じやすい広さです。子ども1人の世帯でも検討しやすく、子ども2人では収納や個室の有無が重要になります。';
+  if (sqm < 70) return '子ども1人の世帯でも比較的ゆとりを持ちやすい広さです。子ども2人の世帯でも、間取りが合えば検討しやすい目安です。';
+  return '子ども2人の世帯でも検討しやすい広さです。部屋数や収納が確保できると、家族で暮らしやすい目安になります。';
+}
+
+function sanitize(raw: string): number {
+  const n = parseFloat(raw);
+  if (isNaN(n) || n < 0) return 0;
+  if (n > MAX_VALUE) return MAX_VALUE;
+  return n;
+}
+
+export function ConvertTab() {
+  const { tatamiStandard, setTatamiStandard, addHistory, incrementSaveCount, isPremium, history } = useApp();
+  const { purchase } = usePremium();
+
+  const [sqmRaw, setSqmRaw] = useState('');
+  const [tsuboRaw, setTsuboRaw] = useState('');
+  const [tatamiRaw, setTatamiRaw] = useState('');
+  const [rentRaw, setRentRaw] = useState('');
+  const [nameRaw, setNameRaw] = useState('');
+  const [memo, setMemo] = useState('');
+
+  const [showTatamiModal, setShowTatamiModal] = useState(false);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [copyLabel, setCopyLabel] = useState('結果をコピー');
+  const [saveMsg, setSaveMsg] = useState('');
+
+  const sqm = sanitize(sqmRaw);
+  const rent = sanitize(rentRaw);
+  const hasArea = sqm > 0;
+  const hasRent = rent > 0 && hasArea;
+
+  const tsubo = sqmToTsubo(sqm);
+  const tatami = sqmToTatami(sqm, tatamiStandard);
+  const perSqm = safeDiv(rent, sqm);
+  const perTsubo = safeDiv(rent, tsubo);
+  const perTatami = rentPerTatami(rent, sqm, tatamiStandard);
+
+  const handleSqmChange = useCallback((v: string) => {
+    if (v.length > 10) return;
+    setSqmRaw(v);
+    const n = sanitize(v);
+    if (n > 0) {
+      setTsuboRaw(sqmToTsubo(n).toFixed(2));
+      setTatamiRaw(sqmToTatami(n, tatamiStandard).toFixed(2));
+    } else {
+      setTsuboRaw('');
+      setTatamiRaw('');
+    }
+  }, [tatamiStandard]);
+
+  const handleTsuboChange = useCallback((v: string) => {
+    if (v.length > 10) return;
+    setTsuboRaw(v);
+    const n = sanitize(v);
+    if (n > 0) {
+      const s = tsuboToSqm(n);
+      setSqmRaw(s.toFixed(2));
+      setTatamiRaw(sqmToTatami(s, tatamiStandard).toFixed(2));
+    } else {
+      setSqmRaw('');
+      setTatamiRaw('');
+    }
+  }, [tatamiStandard]);
+
+  const handleTatamiChange = useCallback((v: string) => {
+    if (v.length > 10) return;
+    setTatamiRaw(v);
+    const n = sanitize(v);
+    if (n > 0) {
+      const s = tatamiToSqm(n, tatamiStandard);
+      setSqmRaw(s.toFixed(2));
+      setTsuboRaw(sqmToTsubo(s).toFixed(2));
+    } else {
+      setSqmRaw('');
+      setTsuboRaw('');
+    }
+  }, [tatamiStandard]);
+
+  const handleRentChange = (v: string) => {
+    if (v.length > 10) return;
+    setRentRaw(v);
+  };
+
+  const handleSave = () => {
+    if (!hasArea) return;
+    if (!isPremium && history.length >= FREE_HISTORY_LIMIT) {
+      setShowPremiumModal(true);
+      return;
+    }
+    const now = new Date();
+    const record: PropertyRecord = {
+      id: crypto.randomUUID(),
+      name: nameRaw.trim() || `物件 ${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`,
+      rent,
+      sqm,
+      memo,
+      perSqm: safeDiv(rent, sqm),
+      perTsubo: safeDiv(rent, sqmToTsubo(sqm)),
+      perTatami: safeDiv(rent, sqmToTatami(sqm, tatamiStandard)),
+      tatamiStandard,
+      savedAt: now.toISOString(),
+    };
+    const ok = addHistory(record);
+    if (!ok) {
+      setShowPremiumModal(true);
+      return;
+    }
+    incrementSaveCount();
+    setSaveMsg('保存しました');
+    setTimeout(() => setSaveMsg(''), 2000);
+  };
+
+  const handleCopy = () => {
+    if (!hasArea) return;
+    const lines = [
+      '【広さと家賃】',
+      `広さ：${sqm}㎡ / ${formatUnit(tsubo, '坪')} / ${formatUnit(tatami, '畳')}`,
+    ];
+    if (hasRent) {
+      lines.push(`家賃：${formatYen(rent)}`);
+      lines.push(`㎡単価：${formatYen(perSqm)}/㎡ | 坪単価：${formatYen(perTsubo)}/坪`);
+    }
+    navigator.clipboard.writeText(lines.join('\n')).catch(() => {});
+    setCopyLabel('コピーしました ✓');
+    setTimeout(() => setCopyLabel('結果をコピー'), 1500);
+  };
+
+  return (
+    <div className={styles.container}>
+
+      {/* 1. コンパクト説明カード */}
+      <div className={styles.introCard}>
+        <p className={styles.introTitle}>㎡を入れるだけ</p>
+        <p className={styles.introText}>不動産サイトの広さを入力すると、畳・坪・家賃単価・暮らし方の目安がわかります。</p>
+      </div>
+
+      {/* 2. ㎡入力カード（主役） */}
+      <div className={styles.primaryInputCard}>
+        <span className={styles.primaryInputBadge}>まずはここに入力</span>
+        <label className={styles.primaryInputLabel}>広さ（㎡）</label>
+        <input
+          className={styles.primaryInput}
+          inputMode="decimal"
+          placeholder="例：25.5"
+          value={sqmRaw}
+          onChange={e => handleSqmChange(e.target.value)}
+        />
+        <p className={styles.primaryInputHint}>不動産サイトにある「専有面積」や「㎡」をそのまま入力してください。</p>
+      </div>
+
+      {/* 3. 変換結果 */}
+      {hasArea && (
+        <>
+          <div className={styles.resultCard}>
+            <div className={styles.resultRow}>
+              <span className={styles.resultLabel}>坪</span>
+              <span className={styles.resultValue}>{formatUnit(tsubo, '坪')}</span>
+            </div>
+            <div className={styles.resultRow}>
+              <span className={styles.resultLabel}>畳</span>
+              <span className={styles.resultValue}>{formatUnit(tatami, '畳')}</span>
+            </div>
+            <button className={styles.tatamiHint} onClick={() => setShowTatamiModal(true)}>
+              畳の基準：{tatamiStandard}㎡ ›
+            </button>
+          </div>
+
+          <div className={styles.guideCard}>
+            <p className={styles.guideTitle}>広さの目安</p>
+            <p className={styles.guideText}>{getAreaGuide(sqm)}</p>
+            <p className={styles.guideNote}>※広さの感じ方は、間取り・収納・生活スタイルによって変わります。</p>
+          </div>
+        </>
+      )}
+
+      {/* 4. 物件名（任意・控えめ） */}
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>物件名（任意）</label>
+        <input
+          className={styles.input}
+          type="text"
+          placeholder="例：渋谷のマンション"
+          value={nameRaw}
+          onChange={e => setNameRaw(e.target.value)}
+          maxLength={40}
+        />
+      </div>
+
+      {/* 5. 補助入力：坪・畳 */}
+      <p className={styles.secondarySectionTitle}>坪・畳から入力したい場合</p>
+
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>坪</label>
+        <input
+          className={styles.input}
+          inputMode="decimal"
+          placeholder="例：7.7"
+          value={tsuboRaw}
+          onChange={e => handleTsuboChange(e.target.value)}
+        />
+      </div>
+
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>畳</label>
+        <input
+          className={styles.input}
+          inputMode="decimal"
+          placeholder="例：15.5"
+          value={tatamiRaw}
+          onChange={e => handleTatamiChange(e.target.value)}
+        />
+      </div>
+
+      {/* 6. 家賃入力 */}
+      <div className={styles.divider} />
+      <p className={styles.sectionLabel}>家賃を入れると単価も計算</p>
+
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>月額家賃（円）</label>
+        <input
+          className={styles.input}
+          inputMode="decimal"
+          placeholder="例：70000"
+          value={rentRaw}
+          onChange={e => handleRentChange(e.target.value)}
+        />
+      </div>
+
+      {hasRent && (
+        <div className={styles.resultCard}>
+          <div className={styles.resultRow}>
+            <span className={styles.resultLabel}>円/㎡</span>
+            <span className={styles.resultValue}>{formatYen(perSqm)}/㎡</span>
+          </div>
+          <div className={styles.resultRow}>
+            <span className={styles.resultLabel}>円/坪</span>
+            <span className={styles.resultValue}>{formatYen(perTsubo)}/坪</span>
+          </div>
+          <div className={styles.resultRow}>
+            <span className={styles.resultLabel}>円/畳</span>
+            <span className={styles.resultValue}>{formatYen(perTatami)}/畳</span>
+          </div>
+          <div className={styles.unitGuide}>
+            <p className={styles.unitGuideTitle}>㎡単価の見方</p>
+            <p className={styles.unitGuideText}>家賃だけでは分かりにくい、広さに対するコスパを確認できます。同じ家賃なら、㎡単価が低い物件ほど広さにゆとりがあります。</p>
+          </div>
+        </div>
+      )}
+
+      {/* 7. メモ・保存 */}
+      <div className={styles.inputGroup}>
+        <label className={styles.label}>メモ（任意）</label>
+        <input
+          className={styles.input}
+          type="text"
+          placeholder="例：駅から5分、ペット可"
+          value={memo}
+          onChange={e => setMemo(e.target.value)}
+          maxLength={100}
+        />
+      </div>
+
+      <button className={styles.saveBtn} onClick={handleSave} disabled={!hasArea}>
+        {saveMsg || '履歴に保存'}
+      </button>
+
+      {hasArea && (
+        <button className={styles.copyBtn} onClick={handleCopy}>
+          {copyLabel}
+        </button>
+      )}
+
+      {showTatamiModal && (
+        <TatamiSettingModal
+          current={tatamiStandard}
+          onSelect={setTatamiStandard}
+          onClose={() => setShowTatamiModal(false)}
+        />
+      )}
+      {showPremiumModal && (
+        <PremiumModal
+          onUpgrade={async () => { await purchase(); setShowPremiumModal(false); }}
+          onClose={() => setShowPremiumModal(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+
+=== src/components/tabs/HistoryTab.module.css ===
+.container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 24px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  gap: 8px;
+}
+
+.emptyText {
+  font-size: 15px;
+  color: #2C2420;
+  margin: 0;
+}
+
+.emptyHint {
+  font-size: 13px;
+  color: #B5A898;
+  margin: 0;
+  text-align: center;
+}
+
+.limitBanner {
+  background: #F2E4D8;
+  color: #C4714A;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.limitBannerFull {
+  background: #FDECEA;
+  color: #C0392B;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.upgradeLink {
+  background: none;
+  border: none;
+  color: #C4714A;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.card {
+  background: #FFFFFF;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2C2420;
+  margin: 0;
+}
+
+.date {
+  font-size: 11px;
+  color: #B5A898;
+  margin: 2px 0 0;
+}
+
+.deleteBtn {
+  background: none;
+  border: 1px solid #E8E0D5;
+  color: #B5A898;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.deleteBtnConfirm {
+  background: #FDECEA;
+  border: 1px solid #C0392B;
+  color: #C0392B;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stat {
+  font-size: 13px;
+  color: #C4714A;
+  font-weight: 500;
+}
+
+.memo {
+  font-size: 12px;
+  color: #8C7B6E;
+  margin: 0;
+}
+
+.cardActions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.copyBtn {
+  background: #F2E4D8;
+  border: none;
+  color: #C4714A;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.copyBtn:hover { background: #E8D5C4; }
+
+
+=== src/components/tabs/HistoryTab.tsx ===
+import { useState } from 'react';
+import { useApp, FREE_HISTORY_LIMIT } from '../../context/AppContext';
+import { formatYen, formatUnit } from '../../lib/format';
+import { sqmToTsubo, sqmToTatami } from '../../lib/constants';
+import { PremiumModal } from '../modals/PremiumModal';
+import type { PropertyRecord } from '../../types';
+import styles from './HistoryTab.module.css';
+import { usePremium } from '../../hooks/usePremium';
+
+export function HistoryTab() {
+  const { history, removeHistory, isPremium } = useApp();
+  const { purchase } = usePremium();
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (r: PropertyRecord) => {
+    const date = new Date(r.savedAt);
+    const dateStr = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+    const tatamiStd = (r.tatamiStandard as '1.62' | '1.65' | '1.824') || '1.62';
+    const tatami = sqmToTatami(r.sqm, tatamiStd);
+    const tsubo = sqmToTsubo(r.sqm);
+    const lines = [
+      '【広さと家賃】',
+      '',
+      r.name,
+      `${r.sqm}㎡ / ${formatUnit(tatami, '畳')} / ${formatUnit(tsubo, '坪')}`,
+    ];
+    if (r.rent > 0) {
+      lines.push(`家賃：${formatYen(r.rent)}`);
+      if (r.perSqm > 0) lines.push(`㎡単価：${formatYen(r.perSqm)}/㎡`);
+      if (r.perTsubo > 0) lines.push(`坪単価：${formatYen(r.perTsubo)}/坪`);
+      if (r.perTatami > 0) lines.push(`畳単価：${formatYen(r.perTatami)}/畳`);
+    }
+    if (r.memo) lines.push(`メモ：${r.memo}`);
+    lines.push(`保存日：${dateStr}`);
+
+    navigator.clipboard.writeText(lines.join('\n')).catch(() => {});
+    setCopiedId(r.id);
+    setTimeout(() => setCopiedId(null), 1500);
+  };
+
+  const remaining = isPremium ? null : FREE_HISTORY_LIMIT - history.length;
+
+  const handleDelete = (id: string) => {
+    if (confirmId === id) {
+      removeHistory(id);
+      setConfirmId(null);
+    } else {
+      setConfirmId(id);
+      setTimeout(() => setConfirmId(null), 3000);
+    }
+  };
+
+  if (history.length === 0) {
+    return (
+      <div className={styles.empty}>
+        <p className={styles.emptyText}>気になる物件をあとで見返せます</p>
+        <p className={styles.emptyHint}>内見候補や迷っている物件を保存しておくと、広さ・家賃・㎡単価をあとから比較し直せます。</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.container}>
+      {!isPremium && (
+        <div className={remaining === 0 ? styles.limitBannerFull : styles.limitBanner}>
+          {remaining === 0
+            ? <>残り0件。<button className={styles.upgradeLink} onClick={() => setShowPremiumModal(true)}>プレミアム版で無制限に</button></>
+            : `履歴 ${history.length}/${FREE_HISTORY_LIMIT}件`
+          }
+        </div>
+      )}
+
+      {history.map(r => {
+        const date = new Date(r.savedAt);
+        const dateStr = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        return (
+          <div key={r.id} className={styles.card}>
+            <div className={styles.cardTop}>
+              <div>
+                <p className={styles.name}>{r.name}</p>
+                <p className={styles.date}>{dateStr}</p>
+              </div>
+              <div className={styles.cardActions}>
+                <button
+                  className={styles.copyBtn}
+                  onClick={() => handleCopy(r)}
+                >
+                  {copiedId === r.id ? 'コピーしました ✓' : 'コピー'}
+                </button>
+                <button
+                  className={confirmId === r.id ? styles.deleteBtnConfirm : styles.deleteBtn}
+                  onClick={() => handleDelete(r.id)}
+                >
+                  {confirmId === r.id ? '確認：削除' : '削除'}
+                </button>
+              </div>
+            </div>
+            <div className={styles.stats}>
+              <span className={styles.stat}>{r.sqm}㎡</span>
+              {r.rent > 0 && <span className={styles.stat}>家賃 {formatYen(r.rent)}</span>}
+              {r.perSqm > 0 && <span className={styles.stat}>{formatYen(r.perSqm)}/㎡</span>}
+            </div>
+            {r.memo && <p className={styles.memo}>{r.memo}</p>}
+          </div>
+        );
+      })}
+
+      {showPremiumModal && (
+        <PremiumModal
+          onUpgrade={async () => { await purchase(); setShowPremiumModal(false); }}
+          onClose={() => setShowPremiumModal(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+
+=== src/context/AppContext.tsx ===
+import { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import type { AppState, PropertyRecord, TatamiStandard } from '../types';
+import { Storage } from '../lib/storage';
+
+type AppContextType = AppState & {
+  setIsPremium: (v: boolean) => void;
+  setTatamiStandard: (v: TatamiStandard) => void;
+  addHistory: (r: PropertyRecord) => boolean;
+  removeHistory: (id: string) => void;
+  incrementSaveCount: () => void;
+  incrementCompareCount: () => void;
+  markReviewed: () => void;
+};
+
+const AppContext = createContext<AppContextType | null>(null);
+
+const FREE_HISTORY_LIMIT = 5;
+
+export function AppProvider({ children }: { children: ReactNode }) {
+  const [isPremium, setIsPremiumState] = useState<boolean>(() =>
+    Storage.get('isPremium') === 'true'
+  );
+  const [tatamiStandard, setTatamiStandardState] = useState<TatamiStandard>(() => {
+    const v = Storage.get('tatamiStandard');
+    return (v as TatamiStandard) || '1.62';
+  });
+  const [history, setHistory] = useState<PropertyRecord[]>(() => {
+    const raw = Storage.get('history');
+    return raw ? JSON.parse(raw) : [];
+  });
+  const [usageCount, setUsageCount] = useState<AppState['usageCount']>(() => {
+    const raw = Storage.get('usageCount');
+    return raw ? JSON.parse(raw) : { saveCount: 0, compareCount: 0, hasReviewed: false };
+  });
+
+  useEffect(() => {
+    Storage.set('history', JSON.stringify(history));
+  }, [history]);
+
+  useEffect(() => {
+    Storage.set('usageCount', JSON.stringify(usageCount));
+  }, [usageCount]);
+
+  const setIsPremium = (v: boolean) => {
+    setIsPremiumState(v);
+    Storage.set('isPremium', String(v));
+  };
+
+  const setTatamiStandard = (v: TatamiStandard) => {
+    setTatamiStandardState(v);
+    Storage.set('tatamiStandard', v);
+  };
+
+  const addHistory = (r: PropertyRecord): boolean => {
+    if (!isPremium && history.length >= FREE_HISTORY_LIMIT) return false;
+    setHistory(prev => [r, ...prev]);
+    return true;
+  };
+
+  const removeHistory = (id: string) => {
+    setHistory(prev => prev.filter(r => r.id !== id));
+  };
+
+  const incrementSaveCount = () =>
+    setUsageCount(prev => ({ ...prev, saveCount: prev.saveCount + 1 }));
+
+  const incrementCompareCount = () =>
+    setUsageCount(prev => ({ ...prev, compareCount: prev.compareCount + 1 }));
+
+  const markReviewed = () =>
+    setUsageCount(prev => ({ ...prev, hasReviewed: true }));
+
+  return (
+    <AppContext.Provider value={{
+      isPremium, tatamiStandard, history, usageCount,
+      setIsPremium, setTatamiStandard, addHistory, removeHistory,
+      incrementSaveCount, incrementCompareCount, markReviewed,
+    }}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+
+export function useApp() {
+  const ctx = useContext(AppContext);
+  if (!ctx) throw new Error('useApp must be used within AppProvider');
+  return ctx;
+}
+
+export { FREE_HISTORY_LIMIT };
+
+
+=== src/hooks/useHistory.ts ===
+import { useApp } from '../context/AppContext';
+
+export function useHistory() {
+  const { history, addHistory, removeHistory } = useApp();
+  return { history, addHistory, removeHistory };
+}
+
+
+=== src/hooks/usePremium.ts ===
+import { useApp } from '../context/AppContext';
+import { Storage } from '../lib/storage';
+
+export function usePremium() {
+  const { isPremium, setIsPremium } = useApp();
+
+  const purchase = async () => {
+    // TODO: IAPロジック (RevenueCat / expo-in-app-purchases)
+    setIsPremium(true);
+    Storage.set('isPremium', 'true');
+  };
+
+  return { isPremium, purchase };
+}
+
+
+=== src/hooks/useReviewPrompt.ts ===
+import type { AppState } from '../types';
+
+export function useReviewPrompt(usageCount: AppState['usageCount']): boolean {
+  return (
+    !usageCount.hasReviewed &&
+    (usageCount.saveCount >= 3 || usageCount.compareCount >= 2)
+  );
+}
+
+
+=== src/index.css ===
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg:        #F7F3EE;
+  --surface:   #FFFFFF;
+  --card:      #FDF9F5;
+  --border:    #E8E0D5;
+  --text-pri:  #2C2420;
+  --text-sec:  #8C7B6E;
+  --text-ter:  #B5A898;
+  --accent:    #C4714A;
+  --accent-l:  #F2E4D8;
+  --accent-d:  #9A4F2E;
+  --green:     #5A7A55;
+  --green-l:   #E4EDE3;
+  --header-bg: #2C2420;
+  --header-fg: #F7F3EE;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  color: var(--text-pri);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+#root {
+  width: 100%;
+  min-height: 100dvh;
+}
+
+button {
+  font-family: inherit;
+}
+
+input {
+  font-family: inherit;
+}
+
+
+=== src/lib/constants.ts ===
+import type { TatamiStandard } from '../types';
+
+export const TSUBO_PER_SQM = 1 / 3.305785;
+export const SQM_PER_TSUBO = 3.305785;
+
+export const TATAMI_SQM: Record<TatamiStandard, number> = {
+  '1.62': 1.62,
+  '1.65': 1.65,
+  '1.824': 1.824,
+};
+
+export function sqmToTsubo(sqm: number): number {
+  return sqm * TSUBO_PER_SQM;
+}
+export function sqmToTatami(sqm: number, std: TatamiStandard): number {
+  return sqm / TATAMI_SQM[std];
+}
+export function tsuboToSqm(tsubo: number): number {
+  return tsubo * SQM_PER_TSUBO;
+}
+export function tatamiToSqm(tatami: number, std: TatamiStandard): number {
+  return tatami * TATAMI_SQM[std];
+}
+export function rentPerSqm(rent: number, sqm: number): number {
+  return rent / sqm;
+}
+export function rentPerTsubo(rent: number, sqm: number): number {
+  return rent / sqmToTsubo(sqm);
+}
+export function rentPerTatami(rent: number, sqm: number, std: TatamiStandard): number {
+  return rent / sqmToTatami(sqm, std);
+}
+
+
+=== src/lib/format.ts ===
+export const formatYen = (n: number): string =>
+  Math.round(n).toLocaleString('ja-JP') + '円';
+
+export const formatUnit = (n: number, unit: string): string =>
+  `約 ${n.toFixed(1)} ${unit}`;
+
+export const safeDiv = (a: number, b: number): number =>
+  b === 0 || isNaN(b) || !isFinite(b) ? 0 : a / b;
+
+
+=== src/lib/storage.ts ===
+export const Storage = {
+  get: (key: string): string | null => {
+    return localStorage.getItem(key);
+  },
+  set: (key: string, value: string): void => {
+    localStorage.setItem(key, value);
+  },
+  remove: (key: string): void => {
+    localStorage.removeItem(key);
+  },
+};
+
+
+=== src/main.tsx ===
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.tsx'
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+
+=== src/types/index.ts ===
+export type TatamiStandard = '1.62' | '1.65' | '1.824';
+
+export type PropertyRecord = {
+  id: string;
+  name: string;
+  rent: number;
+  sqm: number;
+  memo: string;
+  perSqm: number;
+  perTsubo: number;
+  perTatami: number;
+  tatamiStandard: string;
+  savedAt: string;
+};
+
+export type UsageCount = {
+  saveCount: number;
+  compareCount: number;
+  hasReviewed: boolean;
+};
+
+export type AppState = {
+  isPremium: boolean;
+  tatamiStandard: TatamiStandard;
+  history: PropertyRecord[];
+  usageCount: UsageCount;
+};

@@ -1,0 +1,110 @@
+.app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #F7F3EE;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.header {
+  background: #2C2420;
+  padding: 14px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.headerTitle {
+  color: #F7F3EE;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.headerSub {
+  color: #B5A898;
+  font-size: 11px;
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 106px;
+}
+
+.tabBar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 60px;
+  background: #FFFFFF;
+  border-top: 0.5px solid #E8E0D5;
+  display: flex;
+  z-index: 10;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: #B5A898;
+  border: none;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  padding-top: 6px;
+  transition: color 0.15s;
+}
+
+.tabIconWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.tabIcon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tabLabel {
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.tabActive {
+  color: #C4714A;
+  font-weight: 600;
+}
+
+.tabActive::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 3px;
+  background: #C4714A;
+  border-radius: 0 0 3px 3px;
+}
+
+.tabBadge {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  background: #C4714A;
+  border-radius: 50%;
+  border: 1.5px solid #FFFFFF;
+}
