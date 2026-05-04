@@ -1,18 +1,23 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
-import type { AppState, PropertyRecord, TatamiStandard, PropertyStatus } from '../types';
+import type { AppState, PropertyRecord, TatamiStandard, PropertyStatus, ComparePropertyInput } from '../types';
 import { Storage } from '../lib/storage';
 import { FREE_HISTORY_LIMIT } from '../lib/constants';
+
+const emptyInput = (): ComparePropertyInput => ({ name: '', rent: '', sqm: '', memo: '' });
 
 type AppContextType = AppState & {
   setIsPremium: (v: boolean) => void;
   setTatamiStandard: (v: TatamiStandard) => void;
   addHistory: (r: PropertyRecord) => boolean;
+  addHistoryBatch: (records: PropertyRecord[]) => { accepted: number; rejected: number };
   removeHistory: (id: string) => void;
   incrementSaveCount: () => void;
   incrementCompareCount: () => void;
   markReviewed: () => void;
   updatePropertyStatus: (id: string, status: PropertyStatus) => void;
+  setCompareProperties: (props: ComparePropertyInput[]) => void;
+  addCompareProperty: () => void;
 };
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -25,14 +30,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const v = Storage.get('tatamiStandard');
     return (v as TatamiStandard) || '1.62';
   });
-  const [history, setHistory] = useState<PropertyRecord[]>(() => {
-    const raw = Storage.get('history');
-    return raw ? JSON.parse(raw) : [];
-  });
-  const [usageCount, setUsageCount] = useState<AppState['usageCount']>(() => {
-    const raw = Storage.get('usageCount');
-    return raw ? JSON.parse(raw) : { saveCount: 0, compareCount: 0, hasReviewed: false };
-  });
+  const [history, setHistory] = useState<PropertyRecord[]>(() =>
+    Storage.getJson<PropertyRecord[]>('history', [])
+  );
+  const [usageCount, setUsageCount] = useState<AppState['usageCount']>(() =>
+    Storage.getJson('usageCount', { saveCount: 0, compareCount: 0, hasReviewed: false })
+  );
+  const [compareProperties, setComparePropertiesState] = useState<ComparePropertyInput[]>(() =>
+    Storage.getJson<ComparePropertyInput[]>('compareProperties', [emptyInput(), emptyInput()])
+  );
 
   useEffect(() => {
     Storage.set('history', JSON.stringify(history));
@@ -41,6 +47,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     Storage.set('usageCount', JSON.stringify(usageCount));
   }, [usageCount]);
+
+  // compareProperties は debounce して書き込む（毎キーストローク書き込みを防ぐ）
+  const compareDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (compareDebounceRef.current) clearTimeout(compareDebounceRef.current);
+    compareDebounceRef.current = setTimeout(() => {
+      Storage.set('compareProperties', JSON.stringify(compareProperties));
+    }, 500);
+    return () => {
+      if (compareDebounceRef.current) clearTimeout(compareDebounceRef.current);
+    };
+  }, [compareProperties]);
 
   const setIsPremium = (v: boolean) => {
     setIsPremiumState(v);
@@ -56,6 +74,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!isPremium && history.length >= FREE_HISTORY_LIMIT) return false;
     setHistory(prev => [r, ...prev]);
     return true;
+  };
+
+  const addHistoryBatch = (records: PropertyRecord[]): { accepted: number; rejected: number } => {
+    if (isPremium) {
+      setHistory(prev => [...records, ...prev]);
+      return { accepted: records.length, rejected: 0 };
+    }
+    const remaining = Math.max(0, FREE_HISTORY_LIMIT - history.length);
+    const toAdd = records.slice(0, remaining);
+    if (toAdd.length > 0) setHistory(prev => [...toAdd, ...prev]);
+    return { accepted: toAdd.length, rejected: records.length - toAdd.length };
   };
 
   const removeHistory = (id: string) => {
@@ -75,12 +104,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setHistory(prev => prev.map(r => r.id === id ? { ...r, status } : r));
   };
 
+  const setCompareProperties = (props: ComparePropertyInput[]) => {
+    setComparePropertiesState(props);
+  };
+
+  const addCompareProperty = () => {
+    setComparePropertiesState(prev => [...prev, emptyInput()]);
+  };
+
   return (
     <AppContext.Provider value={{
-      isPremium, tatamiStandard, history, usageCount,
-      setIsPremium, setTatamiStandard, addHistory, removeHistory,
+      isPremium, tatamiStandard, history, usageCount, compareProperties,
+      setIsPremium, setTatamiStandard, addHistory, addHistoryBatch, removeHistory,
       incrementSaveCount, incrementCompareCount, markReviewed,
-      updatePropertyStatus,
+      updatePropertyStatus, setCompareProperties, addCompareProperty,
     }}>
       {children}
     </AppContext.Provider>
@@ -92,4 +129,3 @@ export function useApp() {
   if (!ctx) throw new Error('useApp must be used within AppProvider');
   return ctx;
 }
-

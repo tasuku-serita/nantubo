@@ -31,5 +31,5 @@ export function rentPerTatami(rent: number, sqm: number, std: TatamiStandard): n
   return rent / sqmToTatami(sqm, std);
 }
 
-export const FREE_HISTORY_LIMIT = 5;
+export const FREE_HISTORY_LIMIT = 10;
 export const FREE_COMPARE_LIMIT = 2;

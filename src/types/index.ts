@@ -22,9 +22,17 @@ export type UsageCount = {
   hasReviewed: boolean;
 };
 
+export type ComparePropertyInput = {
+  name: string;
+  rent: string;
+  sqm: string;
+  memo: string;
+};
+
 export type AppState = {
   isPremium: boolean;
   tatamiStandard: TatamiStandard;
   history: PropertyRecord[];
   usageCount: UsageCount;
+  compareProperties: ComparePropertyInput[];
 };

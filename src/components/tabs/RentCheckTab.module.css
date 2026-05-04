@@ -1,0 +1,256 @@
+.container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 32px;
+}
+
+.section {
+  background: #FFFFFF;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #2C2420;
+  margin: 0;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 12px;
+  color: #8C7B6E;
+  font-weight: 500;
+}
+
+.input {
+  height: 48px;
+  padding: 0 14px;
+  font-size: 17px;
+  color: #2C2420;
+  background: #FDFAF7;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 12px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.input:focus {
+  border-color: #C4714A;
+  box-shadow: 0 0 0 3px rgba(196, 113, 74, 0.12);
+}
+
+/* ─── 負担率結果 ─── */
+.resultBox {
+  background: #FDF9F5;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rangeRow {
+  display: flex;
+  gap: 12px;
+}
+
+.rangeItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rangeLabel {
+  font-size: 11px;
+  color: #8C7B6E;
+}
+
+.rangeValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2C2420;
+}
+
+.ratioRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.ratioLabel {
+  font-size: 13px;
+  color: #8C7B6E;
+}
+
+.ratioValue {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* ─── 負担率バー ─── */
+.barTrack {
+  height: 10px;
+  background: #E8E0D5;
+  border-radius: 5px;
+  position: relative;
+  overflow: visible;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.barMarker {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 16px;
+  background: #2C2420;
+  border-radius: 1px;
+}
+
+.barLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #B5A898;
+  margin-top: 2px;
+}
+
+.barMarkerLabel {
+  position: absolute;
+  left: 60%;
+  transform: translateX(-50%);
+  font-weight: 600;
+  color: #2C2420;
+}
+
+.ratioComment {
+  font-size: 13px;
+  color: #5A4A42;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── 間取り早見表 ─── */
+.floorPlanList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.floorPlanRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.floorName {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2C2420;
+  min-width: 56px;
+}
+
+.floorBarWrap {
+  flex: 1;
+  height: 8px;
+  background: #F0EAE3;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.floorBar {
+  height: 100%;
+  background: #C4714A;
+  border-radius: 4px;
+}
+
+.floorRange {
+  font-size: 12px;
+  font-weight: 600;
+  color: #C4714A;
+  white-space: nowrap;
+  min-width: 64px;
+  text-align: right;
+}
+
+.floorDesc {
+  font-size: 10px;
+  color: #B5A898;
+  min-width: 100px;
+}
+
+.floorNote {
+  font-size: 11px;
+  color: #B5A898;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── 手取りプリセット ─── */
+.presetGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.presetLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #8C7B6E;
+  margin: 0;
+}
+
+.presetRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.presetChip {
+  height: 32px;
+  padding: 0 12px;
+  background: #FFFFFF;
+  border: 1px solid #E8E0D5;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5A4A42;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  box-shadow: 0 1px 3px rgba(44, 36, 32, 0.06);
+}
+
+.presetChip:hover {
+  border-color: #C4714A;
+  color: #C4714A;
+  background: #FFF4EC;
+}
+
+.presetChipActive {
+  border-color: #C4714A;
+  color: #C4714A;
+  background: #FFF4EC;
+}

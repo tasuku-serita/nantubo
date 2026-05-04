@@ -3,19 +3,37 @@ import { AppProvider, useApp } from './context/AppContext';
 import { ConvertTab } from './components/tabs/ConvertTab';
 import { CompareTab } from './components/tabs/CompareTab';
 import { HistoryTab } from './components/tabs/HistoryTab';
+import { RentCheckTab } from './components/tabs/RentCheckTab';
 import { AdBanner } from './components/common/AdBanner';
 import { ReviewModal } from './components/modals/ReviewModal';
-import { useReviewPrompt } from './hooks/useReviewPrompt';
+import { useReviewPrompt, dismissReviewPermanently, snoozeReview } from './hooks/useReviewPrompt';
+import { track } from './lib/analytics';
 import styles from './App.module.css';
 
-type Tab = 'convert' | 'compare' | 'history';
+function getPlatform(): 'ios' | 'android' | 'web' {
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/.test(ua)) return 'ios';
+  if (/Android/.test(ua)) return 'android';
+  return 'web';
+}
+
+type Tab = 'convert' | 'compare' | 'history' | 'rentcheck';
+
+const TABS: { id: Tab; label: string; icon: string }[] = [
+  { id: 'convert',   label: '広さ',    icon: '📐' },
+  { id: 'rentcheck', label: '家賃',    icon: '💰' },
+  { id: 'compare',   label: '物件比較', icon: '⚖️' },
+  { id: 'history',   label: '保存',    icon: '🕐' },
+];
 
 function AppInner() {
   const [activeTab, setActiveTab] = useState<Tab>('convert');
   const [historyBadge, setHistoryBadge] = useState(false);
-  const { isPremium, usageCount, markReviewed, history } = useApp();
-  const shouldPromptReview = useReviewPrompt(usageCount);
+  const { isPremium, usageCount, history } = useApp();
+  const shouldPromptReview = useReviewPrompt(usageCount, getPlatform());
   const [reviewDismissed, setReviewDismissed] = useState(false);
+
+  useEffect(() => { track('store_open'); }, []);
 
   const prevHistoryLen = useRef(history.length);
   useEffect(() => {
@@ -32,38 +50,44 @@ function AppInner() {
 
   const showReview = shouldPromptReview && !reviewDismissed;
 
+  useEffect(() => {
+    if (showReview) track('review_prompt_shown');
+  }, [showReview]);
+
+  // TODO: リリース後に実アプリの App Store URL へ差し替える
+  // 例: window.open('https://apps.apple.com/app/idXXXXXXXXXX', '_blank');
+  const openReviewPage = () => window.open('https://apps.apple.com/', '_blank');
+
   const handleReview = () => {
-    markReviewed();
+    track('review_clicked');
+    dismissReviewPermanently();
     setReviewDismissed(true);
-    window.open('https://apps.apple.com/', '_blank');
+    openReviewPage();
   };
 
   const handleLater = () => {
-    markReviewed();
+    snoozeReview();
     setReviewDismissed(true);
   };
 
   return (
     <div className={styles.app}>
       <header className={styles.header}>
-        <span className={styles.headerTitle}>広さと家賃を整理</span>
-        <span className={styles.headerSub}>部屋探しの迷いを10秒で</span>
+        <span className={styles.headerTitle}>内見前の物件比較</span>
+        <span className={styles.headerSub}>広さ・家賃・㎡単価で判断</span>
       </header>
 
       <main className={styles.main}>
-        {activeTab === 'convert' && <ConvertTab />}
-        {activeTab === 'compare' && <CompareTab />}
-        {activeTab === 'history' && <HistoryTab />}
+        {activeTab === 'convert'   && <ConvertTab />}
+        {activeTab === 'compare'   && <CompareTab />}
+        {activeTab === 'history'   && <HistoryTab />}
+        {activeTab === 'rentcheck' && <RentCheckTab />}
       </main>
 
       <AdBanner visible={!isPremium} />
 
       <nav className={styles.tabBar}>
-        {([
-          { id: 'convert', label: '変換', icon: '⇄' },
-          { id: 'compare', label: '比較', icon: '⚖️' },
-          { id: 'history', label: '履歴', icon: '🕐' },
-        ] as { id: Tab; label: string; icon: string }[]).map(tab => (
+        {TABS.map(tab => (
           <button
             key={tab.id}
             className={`${styles.tab} ${activeTab === tab.id ? styles.tabActive : ''}`}

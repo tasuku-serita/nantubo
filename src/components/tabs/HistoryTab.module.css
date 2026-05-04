@@ -219,3 +219,60 @@
   border-color: #C4714A;
   font-weight: 600;
 }
+
+/* ─── フィルタチップ ─── */
+.filterRow {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.filterRow::-webkit-scrollbar { display: none; }
+
+.filterChip {
+  flex-shrink: 0;
+  height: 30px;
+  padding: 0 12px;
+  background: #F2E4D8;
+  color: #C4714A;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.filterChipActive {
+  background: #C4714A;
+  color: #FFFFFF;
+}
+
+/* ─── ソート行 ─── */
+.sortRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sortSelect {
+  height: 32px;
+  padding: 0 8px;
+  font-size: 12px;
+  color: #2C2420;
+  background: #FFFFFF;
+  border: 0.5px solid #E8E0D5;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+}
+
+.countLabel {
+  font-size: 12px;
+  color: #B5A898;
+  white-space: nowrap;
+}

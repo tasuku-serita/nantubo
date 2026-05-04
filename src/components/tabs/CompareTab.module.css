@@ -115,9 +115,20 @@
   font-size: 18px;
 }
 
+.lockTextWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .lockMsg {
   font-size: 13px;
   color: #8C7B6E;
+}
+
+.lockSub {
+  font-size: 11px;
+  color: #B5A898;
 }
 
 .addBtn {
@@ -227,3 +238,42 @@
 }
 
 .copyBtn:hover { background: #E8D5C4; }
+
+.persistHint {
+  font-size: 11px;
+  color: #B5A898;
+  text-align: center;
+  margin: -4px 0 0;
+}
+
+.actionRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.actionRow .saveBtn {
+  flex: 1;
+  margin-top: 0;
+}
+
+.actionRow .copyBtn {
+  width: auto;
+  padding: 0 18px;
+}
+
+.lineBtn {
+  height: 48px;
+  padding: 0 14px;
+  background: #06C755;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.lineBtn:hover { background: #05a848; }

@@ -1,39 +1,24 @@
 import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
+import { useInterstitialAd } from '../../hooks/useInterstitialAd';
+import { track } from '../../lib/analytics';
 import { sqmToTsubo, sqmToTatami } from '../../lib/constants';
-import { formatYen, formatUnit, safeDiv } from '../../lib/format';
+import { formatYen, formatUnit, safeDiv, parseNumericInput } from '../../lib/format';
 import { PremiumModal } from '../modals/PremiumModal';
+import type { PremiumModalVariant } from '../modals/PremiumModal';
 import type { PropertyRecord } from '../../types';
 import styles from './CompareTab.module.css';
 import { usePremium } from '../../hooks/usePremium';
 
-const MAX_VALUE = 99_999_999;
+const sanitize = (v: string) => parseNumericInput(v);
 
-type PropertyInput = {
-  name: string;
-  rent: string;
-  sqm: string;
-  memo: string;
-};
-
-const emptyInput = (): PropertyInput => ({ name: '', rent: '', sqm: '', memo: '' });
-
-function sanitize(v: string): number {
-  const n = parseFloat(v);
-  if (isNaN(n) || n < 0) return 0;
-  return Math.min(n, MAX_VALUE);
-}
+type PropertyInput = { name: string; rent: string; sqm: string; memo: string };
 
 function isValid(p: PropertyInput): boolean {
   return sanitize(p.sqm) > 0;
 }
 
-type Computed = {
-  sqm: number;
-  rent: number;
-  perSqm: number;
-  perTsubo: number;
-};
+type Computed = { sqm: number; rent: number; perSqm: number; perTsubo: number };
 
 function compute(p: PropertyInput): Computed {
   const sqm = sanitize(p.sqm);
@@ -46,10 +31,20 @@ function compute(p: PropertyInput): Computed {
   };
 }
 
-function winner<T>(items: T[], score: (t: T) => number, higher: boolean): number[] {
-  const scores = items.map(score);
-  const best = higher ? Math.max(...scores) : Math.min(...scores.filter(s => s > 0));
-  return scores.map((s, i) => (s === best && s > 0 ? i : -1)).filter(i => i >= 0);
+// 有効物件のみを {gIdx, c} の形で抽出してグローバル index を返す勝者判定
+function winnerGlobal(
+  entries: { gIdx: number; c: Computed }[],
+  score: (c: Computed) => number,
+  higher: boolean,
+): number[] {
+  if (entries.length === 0) return [];
+  const scores = entries.map(e => score(e.c));
+  const best = higher
+    ? Math.max(...scores)
+    : Math.min(...scores.filter(s => s > 0));
+  return entries
+    .filter((_, i) => scores[i] === best && scores[i] > 0)
+    .map(e => e.gIdx);
 }
 
 function getDiffComment(
@@ -86,38 +81,50 @@ function getDiffComment(
 }
 
 export function CompareTab() {
-  const { isPremium, tatamiStandard, addHistory, incrementCompareCount } = useApp();
+  const { isPremium, tatamiStandard, addHistoryBatch, incrementCompareCount, compareProperties, setCompareProperties, addCompareProperty } = useApp();
   const { purchase } = usePremium();
+  const { showInterstitialAdIfNeeded } = useInterstitialAd(isPremium);
 
-  const [properties, setProperties] = useState<PropertyInput[]>([emptyInput(), emptyInput()]);
+  const properties = compareProperties;
+
+  const [premiumVariant, setPremiumVariant] = useState<PremiumModalVariant>('default');
   const [showPremiumModal, setShowPremiumModal] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
-  const [copyLabel, setCopyLabel] = useState('比較結果をコピー');
+  const [copyLabel, setCopyLabel] = useState('📋 コピー');
+
+  const openPremiumModal = (variant: PremiumModalVariant) => {
+    setPremiumVariant(variant);
+    setShowPremiumModal(true);
+  };
 
   const update = (i: number, field: keyof PropertyInput, v: string) => {
     if ((field === 'rent' || field === 'sqm') && v.length > 10) return;
-    setProperties(prev => prev.map((p, idx) => idx === i ? { ...p, [field]: v } : p));
+    setCompareProperties(properties.map((p, idx) => idx === i ? { ...p, [field]: v } : p));
   };
 
   const validProps = properties.filter(isValid);
   const computed = properties.map(p => compute(p));
   const validIndices = properties.map((p, i) => isValid(p) ? i : -1).filter(i => i >= 0);
 
-  const widestIdxs       = winner(computed.filter((_, i) => isValid(properties[i])), c => c.sqm, true);
-  const cheapestSqmIdxs  = winner(computed.filter((_, i) => isValid(properties[i]) && computed[i].perSqm > 0), c => c.perSqm, false);
-  const cheapestTsuboIdxs = winner(computed.filter((_, i) => isValid(properties[i]) && computed[i].perTsubo > 0), c => c.perTsubo, false);
-  const cheapestRentIdxs = winner(computed.filter((_, i) => isValid(properties[i]) && computed[i].rent > 0), c => c.rent, false);
+  // 有効物件を {gIdx, c} の形で抽出
+  const validEntries = validIndices.map(i => ({ gIdx: i, c: computed[i] }));
+
+  const widestIdxs        = winnerGlobal(validEntries, e => e.sqm, true);
+  const cheapestSqmIdxs   = winnerGlobal(validEntries.filter(e => e.c.perSqm > 0),   e => e.perSqm,   false);
+  const cheapestTsuboIdxs = winnerGlobal(validEntries.filter(e => e.c.perTsubo > 0), e => e.perTsubo, false);
+  const cheapestRentIdxs  = winnerGlobal(validEntries.filter(e => e.c.rent > 0),     e => e.rent,     false);
 
   const hasAnyRent = validIndices.some(i => computed[i].rent > 0);
   const diffComment = getDiffComment(properties, computed, validIndices);
 
-  function isWinner(globalIdx: number, winnerLocalIdxs: number[]): boolean {
-    const localIdx = validIndices.indexOf(globalIdx);
-    return localIdx >= 0 && winnerLocalIdxs.includes(localIdx);
+  function isWinner(globalIdx: number, winnerGlobalIdxs: number[]): boolean {
+    return winnerGlobalIdxs.includes(globalIdx);
   }
 
-  function getLabel(localIdxs: number[]): string {
-    return localIdxs.map(i => properties[i].name.trim() || `物件${String.fromCharCode(65 + i)}`).join(' / ');
+  function getLabel(globalIdxs: number[]): string {
+    return globalIdxs
+      .map(i => properties[i].name.trim() || `物件${String.fromCharCode(65 + i)}`)
+      .join(' / ');
   }
 
   const handleCopyCompare = () => {
@@ -139,45 +146,76 @@ export function CompareTab() {
     if (cheapestRentIdxs.length > 0 && hasAnyRent) lines.push(`💴 家賃で選ぶなら：${getLabel(cheapestRentIdxs)}`);
     if (cheapestSqmIdxs.length > 0 && hasAnyRent) lines.push(`⚖️ バランスで選ぶなら：${getLabel(cheapestSqmIdxs)}`);
 
-    navigator.clipboard.writeText(lines.join('\n')).catch(() => {});
+    navigator.clipboard.writeText(lines.join('\n'))
+      .then(() => track('copy_success'))
+      .catch(() => track('copy_failed'));
     setCopyLabel('コピーしました ✓');
-    setTimeout(() => setCopyLabel('比較結果をコピー'), 1500);
+    setTimeout(() => setCopyLabel('📋 コピー'), 1500);
+    showInterstitialAdIfNeeded('copy');
+  };
+
+  const handleLineShare = () => {
+    const lines = ['🏠 物件比較メモ', ''];
+    for (let i = 0; i < properties.length; i++) {
+      if (!isValid(properties[i])) continue;
+      const c = computed[i];
+      const name = properties[i].name.trim() || `物件${String.fromCharCode(65 + i)}`;
+      const tatami = sqmToTatami(c.sqm, tatamiStandard);
+      lines.push(`▼ ${name}`);
+      lines.push(`${c.sqm}㎡（${formatUnit(tatami, '畳')}）`);
+      if (c.rent > 0) {
+        lines.push(`家賃：${formatYen(c.rent)}　/　㎡単価：${formatYen(c.perSqm)}`);
+      }
+      lines.push('');
+    }
+    lines.push('━━━━━━━━━━');
+    if (widestIdxs.length > 0) lines.push(`📐 広さで選ぶなら：${getLabel(widestIdxs)}`);
+    if (cheapestRentIdxs.length > 0 && hasAnyRent) lines.push(`💴 家賃で選ぶなら：${getLabel(cheapestRentIdxs)}`);
+    if (cheapestSqmIdxs.length > 0 && hasAnyRent) lines.push(`⚖️ バランスで選ぶなら：${getLabel(cheapestSqmIdxs)}`);
+    lines.push('');
+    lines.push('── 部屋の広さと家賃をチェック ──');
+    const url = `https://line.me/R/msg/text/?${encodeURIComponent(lines.join('\n'))}`;
+    window.open(url, '_blank');
+    track('line_share');
   };
 
   const handleSaveAll = () => {
     if (validProps.length === 0) return;
+    track('save_attempt');
     const now = new Date();
-    let saved = 0;
-    for (let i = 0; i < properties.length; i++) {
-      if (!isValid(properties[i])) continue;
+    const targets: PropertyRecord[] = validIndices.map(i => {
       const c = computed[i];
-      const record: PropertyRecord = {
+      return {
         id: crypto.randomUUID(),
         name: properties[i].name.trim() || `物件${String.fromCharCode(65 + i)} ${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, '0')}/${String(now.getDate()).padStart(2, '0')}`,
-        rent: c.rent,
-        sqm: c.sqm,
-        memo: properties[i].memo,
-        perSqm: c.perSqm,
-        perTsubo: c.perTsubo,
+        rent: c.rent, sqm: c.sqm, memo: properties[i].memo,
+        perSqm: c.perSqm, perTsubo: c.perTsubo,
         perTatami: safeDiv(c.rent, sqmToTatami(c.sqm, tatamiStandard)),
-        tatamiStandard,
-        savedAt: now.toISOString(),
+        tatamiStandard, savedAt: now.toISOString(),
       };
-      const ok = addHistory(record);
-      if (!ok) { setShowPremiumModal(true); break; }
-      saved++;
+    });
+    const { accepted, rejected } = addHistoryBatch(targets);
+    if (accepted === 0) {
+      track('save_limit_hit');
+      openPremiumModal('saveLimit');
+      return;
     }
-    if (saved > 0) {
-      incrementCompareCount();
-      setSaveMsg(`${saved}件保存しました`);
-      setTimeout(() => setSaveMsg(''), 2000);
+    if (rejected > 0) {
+      track('save_limit_hit');
+      openPremiumModal('saveLimit');
     }
+    incrementCompareCount();
+    track('compare_used');
+    setSaveMsg(`${accepted}件候補に追加しました`);
+    setTimeout(() => setSaveMsg(''), 2000);
+    showInterstitialAdIfNeeded('save');
   };
 
   return (
     <div className={styles.container}>
 
       <div className={styles.hintPill}>物件を並べて比較</div>
+      <p className={styles.persistHint}>入力内容はタブを切り替えても保持されます</p>
 
       {properties.map((p, i) => (
         <div key={i} className={styles.propertyCard}>
@@ -237,14 +275,17 @@ export function CompareTab() {
       ))}
 
       {!isPremium && properties.length < 3 && (
-        <button className={styles.lockedCard} onClick={() => setShowPremiumModal(true)}>
+        <button className={styles.lockedCard} onClick={() => openPremiumModal('compareLimit')}>
           <span className={styles.lockIcon}>🔒</span>
-          <span className={styles.lockMsg}>3件以上の比較はプレミアム版（480円）</span>
+          <div className={styles.lockTextWrap}>
+            <span className={styles.lockMsg}>3件以上を比べるならプレミアム版</span>
+            <span className={styles.lockSub}>家賃・広さ・㎡単価をまとめて比較できます。内見前の候補整理に便利です。</span>
+          </div>
         </button>
       )}
 
       {isPremium && properties.length < 3 && (
-        <button className={styles.addBtn} onClick={() => setProperties(prev => [...prev, emptyInput()])}>
+        <button className={styles.addBtn} onClick={addCompareProperty}>
           + 物件を追加
         </button>
       )}
@@ -281,22 +322,28 @@ export function CompareTab() {
               <p className={styles.summaryNote}>家賃を入力すると、家賃・バランスの比較も表示されます。</p>
             )}
           </div>
-          <button className={styles.copyBtn} onClick={handleCopyCompare}>
-            {copyLabel}
-          </button>
         </>
       )}
 
-      <button
-        className={styles.saveBtn}
-        onClick={handleSaveAll}
-        disabled={validProps.length === 0}
-      >
-        {saveMsg || '比較結果をまとめて保存'}
-      </button>
+      <div className={styles.actionRow}>
+        <button
+          className={styles.saveBtn}
+          onClick={handleSaveAll}
+          disabled={validProps.length === 0}
+        >
+          {saveMsg || '候補リストに追加'}
+        </button>
+        <button className={styles.copyBtn} onClick={handleCopyCompare}>
+          {copyLabel}
+        </button>
+        <button className={styles.lineBtn} onClick={handleLineShare}>
+          LINE
+        </button>
+      </div>
 
       {showPremiumModal && (
         <PremiumModal
+          variant={premiumVariant}
           onUpgrade={async () => { await purchase(); setShowPremiumModal(false); }}
           onClose={() => setShowPremiumModal(false)}
         />
